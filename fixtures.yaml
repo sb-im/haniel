@@ -1,0 +1,40 @@
+commands:
+  meow:
+    # socket send "value" + "\n"
+    - puts: "Meow ~ Meow ~"
+    # such as "300ms", "-1.5h" or "2h45m". Valid time units are "ns", "us" (or "µs"), "ms", "s", "m", "h".
+    # Reference: https://golang.org/pkg/time/#ParseDuration
+    - sleep: 1s
+    - puts: "~~~ ~~~ ~~~"
+    - sleep: 4s
+    # Exec command exist in "commands"
+    # Can be recursive
+    - cmd: meow
+  hello:
+    - puts: "233"
+    - sleep: 10s
+    - puts: "233333333333333333"
+    - sleep: 4s
+  shine:
+    - puts: "No ~ "
+
+# socket recv
+input:
+  # "key" Must exist in "commands"
+  # If match "value", exec "key"
+  - hello: 233
+  - meow: hello
+  - shine: kill
+
+# onStart execution
+# Not onSocket open execution
+# This is concurrent execution
+default:
+  - meow
+  - hello
+
+# if mutex exist, kill mutex after execution
+mutex:
+  - ["meow", "shine"]
+  - ["hello", "shine"]
+
