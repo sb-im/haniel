@@ -2,19 +2,19 @@ package main
 
 import (
 	"bufio"
+	"bytes"
 	"log"
 	"net"
-  "bytes"
 	"sync"
-  "time"
+	"time"
 )
 
 type SocketServer struct {
-	links    []*net.Conn
+	links  []*net.Conn
 	lock   sync.Mutex
 	logger *log.Logger
-  input chan []byte
-  output chan []byte
+	input  chan []byte
+	output chan []byte
 }
 
 func (this *SocketServer) Listen(addr string) {
@@ -28,7 +28,7 @@ func (this *SocketServer) Listen(addr string) {
 
 	for {
 		conn, err := listener.Accept()
-    this.addLink(&conn)
+		this.addLink(&conn)
 		this.logger.Println("New Connect:", &conn)
 		if err != nil {
 			this.logger.Println("Connect Err:", &conn, err)
@@ -46,10 +46,10 @@ func (this *SocketServer) Client(addr string) {
 		} else {
 			this.logger.Println("New connect", &conn)
 
-      this.addLink(&conn)
+			this.addLink(&conn)
 			go this.send(this.input)
 
-      this.recv(&conn, this.output)
+			this.recv(&conn, this.output)
 			this.logger.Println("Connect err try reconnect")
 		}
 	}
@@ -76,15 +76,15 @@ func (this *SocketServer) delLink(link *net.Conn) {
 }
 
 func (this *SocketServer) send(input chan []byte) {
-  for msg := range input {
-    for _, conn := range this.links {
-      this.logger.Println("Send:", string(msg))
-      n, err := (*conn).Write(msg)
-      if err != nil {
-        this.logger.Println("Write Err:", conn, n, err)
-      }
-    }
-  }
+	for msg := range input {
+		for _, conn := range this.links {
+			this.logger.Println("Send:", string(msg))
+			n, err := (*conn).Write(msg)
+			if err != nil {
+				this.logger.Println("Write Err:", conn, n, err)
+			}
+		}
+	}
 }
 
 func (this *SocketServer) recv(conn *net.Conn, output chan []byte) {
@@ -100,8 +100,8 @@ func (this *SocketServer) recv(conn *net.Conn, output chan []byte) {
 			break
 		}
 
-    this.logger.Println("Recv:", conn, string(raw))
-    output <- raw
+		this.logger.Println("Recv:", conn, string(raw))
+		output <- raw
 	}
 }
 
