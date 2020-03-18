@@ -3,7 +3,7 @@ go1.13:
   before_script:
     - go version
   script:
-    - go test
+    - go test -cover
     - go build
   only:
     refs:
@@ -14,18 +14,8 @@ go1.14:
   before_script:
     - go version
   script:
-    - go test
-    - go build
-  only:
-    refs:
-      - master
-
-coverage:
-  image: golang:1.13-buster
-  before_script:
-    - go version
-  script:
     - go test -cover
+    - go build
   only:
     refs:
       - master
