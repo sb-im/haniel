@@ -11,6 +11,7 @@ commands:
     # Can be recursive
     - cmd: meow
   hello:
+    - sleep: 1s
     - puts: "233"
     - sleep: 10s
     - puts: "233333333333333333"
