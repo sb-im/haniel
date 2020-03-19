@@ -1,0 +1,29 @@
+name: Go
+on: [push, pull_request]
+jobs:
+
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Setup Go
+        uses: actions/setup-go@v1
+        with:
+          go-version: 1.13.x
+
+      - name: Check out code into the Go module directory
+        uses: actions/checkout@v1
+      
+      - name: Cache go module
+        uses: actions/cache@v1
+        with:
+          path: ~/go/pkg/mod
+          key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
+          restore-keys: |
+            ${{ runner.os }}-go-
+      - name: Get dependencies and run test
+        run: |
+          go test 
+          
+      - name: Build
+        run: go build -v .
