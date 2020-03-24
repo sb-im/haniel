@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"encoding/hex"
 	"errors"
 	"log"
 	"strings"
@@ -9,9 +10,10 @@ import (
 )
 
 const (
-	CMD   = "cmd"
-	PUTS  = "puts"
-	SLEEP = "sleep"
+	CMD     = "cmd"
+	PUTS    = "puts"
+	PUT_HEX = "put_hex"
+	SLEEP   = "sleep"
 )
 
 type Config struct {
@@ -167,6 +169,15 @@ func (this *Simulation) doCommand(command string, ctx context.Context) {
 				this.logger.Printf("PUTS: %v\n", value[PUTS])
 
 				this.Output <- []byte(value[PUTS] + "\n")
+			case value[PUT_HEX] != "":
+				this.logger.Printf("PUT_HEX: %v\n", value[PUT_HEX])
+
+				str, err := hex.DecodeString(value[PUT_HEX])
+				if err != nil {
+					this.logger.Panicln(err)
+				}
+				this.Output <- []byte(str)
+
 			case value[SLEEP] != "":
 				this.logger.Printf("SLEEP: %v\n", value[SLEEP])
 

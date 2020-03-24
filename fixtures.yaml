@@ -18,6 +18,8 @@ commands:
     - sleep: 4s
   shine:
     - puts: "No ~ "
+  hex:
+    - put_hex: "aa000000220101000001040000000500010100008382800d000772657175657374bb"
 
 # socket recv
 input:
