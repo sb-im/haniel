@@ -24,7 +24,7 @@ func Test_getConfig(t *testing.T) {
 func Test_Config_GetAllCommandName(t *testing.T) {
 	config, _ := getConfig(test_fixtures)
 	commands := config.GetAllCommandName()
-	if len(commands) != 3 {
+	if len(commands) != 4 {
 		t.Errorf("Incorrect number of commands")
 	}
 }
