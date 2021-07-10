@@ -17,8 +17,9 @@ Socket(Server/Client) IO simulation
 ```sh
 ./haniel -h
 Usage of ./haniel:
--c string
+-f string
 the fixtures config (default "fixtures.yaml")
+-d    No log, No prompt
 -h    Show help
 -l string
 As socket Server Address default enable (default "localhost:1234")

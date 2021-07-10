@@ -35,7 +35,9 @@ func getConfig(str string) (Config, error) {
 
 func main() {
 	help := flag.Bool("h", false, "Show help")
-	config_file := flag.String("c", "fixtures.yaml", "the fixtures config")
+	config_file := flag.String("f", "fixtures.yaml", "the fixtures config")
+	config_file = flag.String("c", "fixtures.yaml", "discard")
+	isDaemon := flag.Bool("d", false, "No log, No prompt")
 	log_path := flag.String("log", "haniel.log", "the running log path")
 	socket_server := flag.String("l", "localhost:1234", "As socket Server Address default enable")
 	socket_client := flag.String("p", "", "As socket Client Address default disable '-p || -l'")
@@ -64,6 +66,9 @@ func main() {
 	}
 	//logger := log.New(os.Stdout, "[DEV] ", log.LstdFlags)
 	logger := log.New(logfile, "[DEV] ", log.LstdFlags)
+	if *isDaemon {
+		logger = log.New(ioutil.Discard, "", log.LstdFlags)
+	}
 
 	ch_command := make(chan string)
 	ch_send := make(chan []byte, 128)
@@ -100,15 +105,19 @@ func main() {
 	// execute default need run command
 	simulation.RunDefault()
 
-	for {
-		command, err := menuSelect(items)
-		if err != nil {
-			log.Println(err)
-			fmt.Println("Exit")
-			break
+	if *isDaemon {
+		select {}
+	} else {
+		for {
+			command, err := menuSelect(items)
+			if err != nil {
+				log.Println(err)
+				fmt.Println("Exit")
+				break
+			}
+			fmt.Printf("You choose %q\n", command)
+			simulation.Command <- command
 		}
-		fmt.Printf("You choose %q\n", command)
-		simulation.Command <- command
 	}
 
 }
