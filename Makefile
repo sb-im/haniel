@@ -1,6 +1,6 @@
 NAME=haniel
 BINDIR=bin
-GOBUILD=go build
+GOBUILD=CGO_ENABLED=0 go build
 
 PLATFORM_LIST = \
 								darwin-amd64 \
