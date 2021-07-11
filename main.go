@@ -36,7 +36,6 @@ func getConfig(str string) (Config, error) {
 func main() {
 	help := flag.Bool("h", false, "Show help")
 	config_file := flag.String("f", "fixtures.yaml", "the fixtures config")
-	config_file = flag.String("c", "fixtures.yaml", "discard")
 	isDaemon := flag.Bool("d", false, "No log, No prompt")
 	log_path := flag.String("log", "haniel.log", "the running log path")
 	socket_server := flag.String("l", "localhost:1234", "As socket Server Address default enable")
